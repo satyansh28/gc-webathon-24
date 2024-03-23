@@ -67,7 +67,7 @@ exports.resetPassword = async (req, res, next) => {
     const { oldPassword, newPassword } = req.body;
     if (req.user && (await bcrypt.compare(oldPassword, req.user.password))) {
       req.user.password = await bcrypt.hash(newPassword, 12);
-      req.user.save();
+      await req.user.save();
       res.status(200).send();
     }
     res.status(401).send();

@@ -24,6 +24,7 @@ const studentCourse_schema = new schema(
   },
   { timestamps: true }
 );
+studentCourse_schema.index({ courseId: 1, studentId: 1}, { unique: true });
 
 const studentCourse = mongoose.model("StudentCourse", studentCourse_schema);
 module.exports = studentCourse;

@@ -8,13 +8,18 @@ const course_schema = new schema(
       type: Number,
       required:true
     },
+    status:{
+      type:String,
+      enum: ["ongoing","open","over"]
+    },
     semester:{
         type:String,
         enum:["Autumn","Spring"],
         required:true
     },
     name:{
-        type:String
+        type:String,
+        required:true
     },
     numberOfClasses:{
         type:Number,

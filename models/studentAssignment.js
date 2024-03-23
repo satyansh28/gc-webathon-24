@@ -26,6 +26,7 @@ const studentAsg_schema = new schema(
   },
   { timestamps: true }
 );
+studentAsg_schema.index({ courseId: 1, assignmentId: 1}, { unique: true });
 
 const studentAsg = mongoose.model("StudentAsg", studentAsg_schema);
 module.exports = studentAsg;

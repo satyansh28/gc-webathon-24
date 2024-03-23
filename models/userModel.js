@@ -32,6 +32,17 @@ const user_schema = new schema(
     },
     profilePic:{
       type: Buffer
+    },
+    branch:{
+      type:String,
+      enum:["CSE","MECH","CIVIL","EE","EC","META"]
+    },
+    course:{
+      type:String,
+      enum:["B.Tech","M.tech"]
+    },
+    batch:{
+      type:Number
     }
     
   },

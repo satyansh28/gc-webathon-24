@@ -22,7 +22,7 @@ exports.checkLogin = async (req, res, next) => {
       return next();
     }
     else
-        throw new Error("No-cookie")
+      res.status(401).send();
   } catch (err) {
     console.log(err);
     res.status(400).send();
