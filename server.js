@@ -18,6 +18,7 @@ mongoose
   });
 
 const authRoutes = require("./routes/authRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 const { checkLogin } = require("./middleware/authMiddleware");
 const app = express();
 
@@ -48,7 +49,7 @@ app.options("*", (req, res) => {
 
 //routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/student",studentRoutes)
 //global-catch
 app.use(async (err, req, res, next) => {
   console.log(err);

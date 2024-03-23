@@ -3,7 +3,7 @@ const schema = mongoose.Schema;
 
 const course_schema = new schema(
   {
-    instructor: [String], //id of instructors
+    instructor: [mongoose.Schema.ObjectId], //id of instructors
     year: {
       type: Number,
       required:true
