@@ -1,0 +1,16 @@
+.poppins-medium {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+.tauri-regular {
+  font-family: "Tauri", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+.oswald {
+  font-family: "Oswald", sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+}
