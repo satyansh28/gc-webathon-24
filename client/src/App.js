@@ -12,6 +12,8 @@ import AssignmentView from "./Components/Common/AssignmentView";
 import CoursesRegistrationForm from "./Components/Students/CoursesRegistrationForm";
 import SignUp from "./Components/SignUp";
 import Feedback from "./Components/Students/Feedback";
+import Profile from "./Components/Common/Profile";
+import ViewFeedback from "./Components/Common/ViewFeedback";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -50,6 +52,10 @@ const App = () => {
                 {user.role === "student" && (
                   <Route path="/feedback" element={<Feedback />} />
                 )}
+                {user.role !== "student" && (
+                  <Route path="/view-feedback" element={<ViewFeedback />} />
+                )}
+                <Route path="/view_profile" element={<Profile />} />
                 <Route
                   path="/courses/assignments/:id"
                   element={<Assignments />}

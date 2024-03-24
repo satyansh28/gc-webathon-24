@@ -2,7 +2,6 @@ import { Assignment } from "@mui/icons-material";
 import {
   Box,
   Divider,
-  Grid,
   List,
   ListItem,
   ListItemAvatar,
@@ -38,6 +37,7 @@ import UserContext from "../UserContext";
 // ];
 
 const Assignments = () => {
+  const courseId = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [assigns,setAssign]=useState([])
