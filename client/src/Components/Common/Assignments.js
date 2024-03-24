@@ -37,7 +37,6 @@ import UserContext from "../UserContext";
 // ];
 
 const Assignments = () => {
-  const courseId = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [assigns,setAssign]=useState([])

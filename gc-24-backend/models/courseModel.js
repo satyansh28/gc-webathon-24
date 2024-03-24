@@ -17,6 +17,9 @@ const course_schema = new schema(
         enum:["Autumn","Spring"],
         required:true
     },
+    credit:{
+      type:Number
+    },
     name:{
         type:String,
         required:true
