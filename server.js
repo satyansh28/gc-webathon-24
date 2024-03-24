@@ -19,6 +19,8 @@ mongoose
 
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+
 const { checkLogin } = require("./middleware/authMiddleware");
 const app = express();
 
@@ -49,9 +51,11 @@ app.options("*", (req, res) => {
 
 //routes
 app.use("/api/auth", authRoutes);
-app.use("/api/student",studentRoutes)
+app.use("/api/student",studentRoutes);
+app.use("/api/admin",adminRoutes);
+
 //global-catch
-app.use(async (err, req, res, next) => {
+app.use((err, req, res, next) => {
   console.log(err);
   res.status(400).send("Invalid Request.");
 });

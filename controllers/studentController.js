@@ -3,6 +3,10 @@ const Course = require("./../models/courseModel");
 const studentCourse = require("./../models/studentCourse");
 const studentAssignment=require("../models/studentAssignment")
 const feedback=require("../models/feedbackModel")
+const assignment=require("../models/assignmentModel")
+const equipments=[
+  {name:"Badminton Raquet",stock:8},{name:"Shuttlecock",stock:6}
+];
 exports.editDetails = async (req, res, next) => {
   try {
     const { userData } = req.body;
@@ -89,8 +93,12 @@ exports.myAssignments=async(req,res,next)=>{
     try{
         const findFilter={studentId:req.user._id}
         if(req.query.assignmentId)
-            findFilter.assignmentId=req.query.assignmentId
-        const resultList=await studentAssignment.find(findFilter).populate('assignmentId').exec()
+            findFilter.assignmentId=req.query.assignmentId     
+        let resultList=await studentAssignment.find(findFilter).populate('assignmentId').exec()
+        if(req.query.courseId)
+        {
+          resultList=resultList.filter(res=>res.assignmentId.courseId.toString()===req.query.courseId.toString())
+        }
         res.status(200).json({
             assignmentList:resultList
         })
@@ -134,6 +142,33 @@ exports.getFeedbackables=async(req,res,next)=>{
 exports.giveFeedback=async(req,res,next)=>{
   try{
     await feedback.create({actorId:req.body.actorId,reviewType:req.body.type,review:req.body.review})
+    res.status(200).send()
+  }
+  catch(err)
+  {
+    console.log(err)
+    res.status(400).send()
+  }
+}
+
+exports.getSACEquipment=async(req,res,next)=>{
+  try{
+    res.status(200).json({equipmentList:equipments}).send()
+  }
+  catch(err)
+  {
+    console.log(err)
+    res.status(400).send()
+  }
+}
+
+exports.updateSACEquipment=async(req,res,next)=>{
+  try{
+    for(i=0;i<equipments.length;i++)
+    {
+      if(equipments[i].name==req.body.equipmentName);
+        equipments[i]+=parseInt(req.body.updateCount);
+    }
     res.status(200).send()
   }
   catch(err)
