@@ -1,12 +1,10 @@
 import {
   Avatar,
-  Backdrop,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Divider,
   Grid,
@@ -33,6 +31,8 @@ const AssignmentDetail = {
   dueDate: "12/10/2024",
   points: 100,
   url: "https://www.google.com",
+  question:
+    "This is the question for the assignment. This is the question for the assignment. This is the question for the assignment. This is the question for the assignment.",
 };
 
 const students = [
@@ -86,37 +86,50 @@ const StudentList = ({ setStudent }) => {
   );
 };
 
-const Submission = ({ submission, points, setSubmission }) => {
+const Submission = ({ user, submission, points, setSubmission }) => {
   return (
     <Box className="d-flex align-items-center flex-column">
       <Box sx={{ mt: 5 }}>
-        <Link
-          to={submission.url}
-          target="_blank"
-          className="text-decoration-none ms-2"
-        >
-          <Box className="d-flex align-items-center border py-2 pe-3 ps-1 rounded assignmentPdf">
-            <Box sx={{ mr: 5 }}>
-              <img src={PdfIcon} alt="PDF" width="50px" height="50px" />
+        {submission.url && (
+          <Link
+            to={submission.url}
+            target="_blank"
+            className="text-decoration-none ms-2"
+          >
+            <Box className="d-flex align-items-center border py-2 pe-3 ps-1 rounded assignmentPdf">
+              <Box sx={{ mr: 5 }}>
+                <img src={PdfIcon} alt="PDF" width="50px" height="50px" />
+              </Box>
+              <Typography className="tauri-regular">Submission</Typography>
             </Box>
-            <Typography className="tauri-regular">Submission</Typography>
-          </Box>
-        </Link>
+          </Link>
+        )}
+      </Box>
+      <Box sx={{ height: "100px", overflowY: "auto" }}>
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          {submission.answer}
+        </Typography>
       </Box>
       <Box sx={{ mt: 5 }}>
-        <TextField
-          label="Score"
-          sx={{ m: 1 }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">/ {points}</InputAdornment>
-            ),
-          }}
-          value={submission.score}
-          onChange={(e) =>
-            setSubmission({ ...submission, score: e.target.value })
-          }
-        />
+        {user.role === "prof" ? (
+          <TextField
+            label="Score"
+            sx={{ m: 1 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">/ {points}</InputAdornment>
+              ),
+            }}
+            value={submission.score}
+            onChange={(e) =>
+              setSubmission({ ...submission, score: e.target.value })
+            }
+          />
+        ) : (
+          <Typography variant="h6" className="oswald">
+            Score: {submission.score}
+          </Typography>
+        )}
       </Box>
       <Button variant="contained" sx={{ mt: 5 }} disableElevation>
         Submit
@@ -128,17 +141,15 @@ const Submission = ({ submission, points, setSubmission }) => {
 const AssignmentView = () => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
-  const [assign, setAssign] = useState({
-    topic: "Assignment 1",
-    dueDate: "12/10/2024",
-    points: 100,
-    url: "https://www.google.com",
-  });
+  const [assign, setAssign] = useState(AssignmentDetail);
   const [submission, setSubmission] = useState({
     score: 0,
     url: "https://www.google.com",
+    answer:
+      "This is the answer for the assignment. This is the answer for the assignment. This is the answer for the assignment. This is the answer for the assignment.",
   });
   const [activeStu, setActiveStu] = useState();
+  const { user, updateUser } = useContext(UserContext);
 
   const handleClose = () => {
     setEdit(false);
@@ -149,25 +160,41 @@ const AssignmentView = () => {
       <Typography variant="h4" className="oswald">
         Assignment {id}
       </Typography>
-      <Box
-        sx={{ mt: 5, mb: 5, px: 20 }}
-        className="d-flex align-items-center justify-content-between"
-      >
-        <Link
-          to={AssignmentDetail.url}
-          target="_blank"
-          className="text-decoration-none ms-2"
-        >
-          <Box className="d-flex align-items-center border py-2 pe-3 ps-1 rounded assignmentPdf">
-            <Box sx={{ mr: 5 }}>
-              <img src={PdfIcon} alt="PDF" width="50px" height="50px" />
+      <Grid container sx={{ mt: 5, mb: 5 }}>
+        <Grid item xs className="d-flex">
+          {AssignmentDetail.url && (
+            <Link
+              to={AssignmentDetail.url}
+              target="_blank"
+              className="text-decoration-none ms-2"
+            >
+              <Box className="d-flex align-items-center border py-2 pe-3 ps-1 rounded assignmentPdf">
+                <Box sx={{ mr: 2 }}>
+                  <img src={PdfIcon} alt="PDF" width="50px" height="50px" />
+                </Box>
+                <Typography
+                  className="tauri-regular"
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "12ch",
+                  }}
+                >
+                  {AssignmentDetail.topic}
+                </Typography>
+              </Box>
+            </Link>
+          )}
+          {AssignmentDetail.question && (
+            <Box sx={{ height: "60px", overflowY: "auto" }}>
+              <Typography variant="subtitle1" sx={{ ml: 1, mr: 3 }}>
+                {AssignmentDetail.question}
+              </Typography>
             </Box>
-            <Typography className="tauri-regular">
-              {AssignmentDetail.topic}
-            </Typography>
-          </Box>
-        </Link>
-        <Box className="d-flex align-items-center">
+          )}
+        </Grid>
+        <Grid item className="d-flex align-items-center">
           <Box sx={{ mr: 3 }}>
             <Typography
               className="tauri-regular"
@@ -182,13 +209,15 @@ const AssignmentView = () => {
               Points: {AssignmentDetail.points}
             </Typography>
           </Box>
-          <Button
-            variant="contained"
-            startIcon={<Edit />}
-            onClick={() => setEdit(true)}
-          >
-            Edit
-          </Button>
+          {user.role === "prof" && (
+            <Button
+              variant="contained"
+              startIcon={<Edit />}
+              onClick={() => setEdit(true)}
+            >
+              Edit
+            </Button>
+          )}
           <Dialog
             open={edit}
             onClose={() => setEdit(false)}
@@ -211,7 +240,19 @@ const AssignmentView = () => {
                 }
               />
               <TextField
-                label="Assignment Url"
+                label="Question"
+                variant="standard"
+                multiline
+                maxRows={4}
+                fullWidth
+                sx={{ mb: 4 }}
+                value={assign.question}
+                onChange={(e) =>
+                  setAssign({ ...assign, question: e.target.value })
+                }
+              />
+              <TextField
+                label="Assignment URL"
                 variant="standard"
                 multiline
                 maxRows={4}
@@ -243,14 +284,17 @@ const AssignmentView = () => {
               </Button>
             </DialogActions>
           </Dialog>
-        </Box>
-      </Box>
-      <Grid container spacing={2}>
-        <Grid item xs={5}>
-          <StudentList setStudent={setActiveStu} />
         </Grid>
-        <Grid item xs={7}>
+      </Grid>
+      <Grid container spacing={2}>
+        {user.role === "prof" && (
+          <Grid item xs={5}>
+            <StudentList setStudent={setActiveStu} />
+          </Grid>
+        )}
+        <Grid item xs={user.role === "prof" ? 7 : 12}>
           <Submission
+            user={user}
             submission={submission}
             points={assign.points}
             setSubmission={setSubmission}

@@ -12,6 +12,7 @@ import AssignmentView from "./Components/Common/AssignmentView";
 import CoursesRegistrationForm from "./Components/Students/CoursesRegistrationForm";
 import SignUp from "./Components/SignUp";
 import Feedback from "./Components/Students/Feedback";
+import Profile from "./Components/Common/Profile";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -50,6 +51,7 @@ const App = () => {
                 {user.role === "student" && (
                   <Route path="/feedback" element={<Feedback />} />
                 )}
+                <Route path="/view_profile" element={<Profile />} />
                 <Route
                   path="/courses/assignments/:id"
                   element={<Assignments />}

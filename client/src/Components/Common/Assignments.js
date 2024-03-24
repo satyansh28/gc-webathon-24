@@ -2,7 +2,6 @@ import { Assignment } from "@mui/icons-material";
 import {
   Box,
   Divider,
-  Grid,
   List,
   ListItem,
   ListItemAvatar,
@@ -11,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserContext from "../UserContext";
 
 const assigns = [
@@ -38,6 +37,7 @@ const assigns = [
 ];
 
 const Assignments = () => {
+  const courseId = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const handleAssignmentView = (index) => {
