@@ -1,0 +1,14 @@
+.sidenav {
+	background-color: rgb(35, 35, 35);
+	color: white;
+	height: 95vh;
+	border-radius: 15px;
+}
+.sidenav-active {
+	background-color: rgb(33, 129, 246);
+}
+.sidenav-content > a > div:hover {
+	background-color: rgba(33, 129, 246, 0.503) !important;
+	transition: 0.1s;
+	transform: scale(0.95);
+}
