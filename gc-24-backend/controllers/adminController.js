@@ -1,7 +1,6 @@
 const User = require("./../models/userModel");
 const Course = require("../models/courseModel");
 const feedback = require("../models/feedbackModel");
-const course = require("../models/courseModel");
 
 exports.addCourse = async (req, res, next) => {
   try {
@@ -30,7 +29,21 @@ exports.getProfessors = async (req, res, next) => {
     res.status(400).send();
   }
 };
-
+exports.getCourses = async (req, res, next) => {
+  try {
+    const courseList = await Course.find()
+      .exec();
+    res
+      .status(200)
+      .json({
+        courseList: courseList,
+      })
+      .send();
+  } catch (err) {
+    console.log(err);
+    res.status(400).send();
+  }
+};
 exports.getFeedbacks = async (req, res, next) => {
   try {
     const proffesorList = await feedback
