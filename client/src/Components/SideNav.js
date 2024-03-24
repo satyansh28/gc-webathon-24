@@ -35,11 +35,11 @@ const Sections = {
   ],
   prof: [
     { name: "Courses", link: "/courses/", icon: <AutoStories /> },
-    { name: "Feedback", link: "/feedback", icon: <Feedback /> },
+    { name: "Feedback", link: "/view-feedback", icon: <Feedback /> },
   ],
   admin: [
     { name: "Courses", link: "/courses/", icon: <AutoStories /> },
-    { name: "Feedback", link: "/feedback", icon: <Feedback /> },
+    { name: "Feedback", link: "/view-feedback", icon: <Feedback /> },
     { name: "SignUp", link: "/signup", icon: <PersonAdd /> },
   ],
 };
