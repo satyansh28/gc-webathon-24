@@ -98,7 +98,7 @@ const Courses = () => {
 
   const handleViewAssignments = (courseId) => {
     setShouldRedirect(true);
-    setRedirectPath(`/courses/assignment/${courseId}`);
+    setRedirectPath(`/courses/assignments/${courseId}`);
   };
 
   const handleTakeAttendance = (courseId) => {
@@ -158,7 +158,7 @@ const Courses = () => {
         </Grid>
       );
     });
-  } else if (user.role === "prof") {
+  } else if (user.role === "prof" || user.role === "admin") {
     coursesContent = courses.map((course, index) => {
       return (
         <Grid item xs={4} sx={{ height: "100%" }} key={index}>

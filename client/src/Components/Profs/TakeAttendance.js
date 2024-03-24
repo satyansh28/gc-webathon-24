@@ -147,7 +147,7 @@ const TakeAttendance = () => {
             Submit
           </Button>
         </Box>
-        {shouldRedirect && <Navigate replace to="/" />}
+        {shouldRedirect && <Navigate replace to="/courses" />}
       </Stack>
     );
   }

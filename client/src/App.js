@@ -4,12 +4,14 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import { Grid } from "@mui/material";
 import SideNav from "./Components/SideNav";
-import Courses from "./Components/Students/Courses";
+import Courses from "./Components/Common/Courses";
 import UserContext from "./Components/UserContext";
 import TakeAttendance from "./Components/Profs/TakeAttendance";
 import Assignments from "./Components/Common/Assignments";
 import AssignmentView from "./Components/Common/AssignmentView";
 import CoursesRegistrationForm from "./Components/Students/CoursesRegistrationForm";
+import SignUp from "./Components/SignUp";
+import Feedback from "./Components/Students/Feedback";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -28,12 +30,12 @@ const App = () => {
         ) : (
           <Grid container>
             <Grid item xs={2.2}>
-              <SideNav user={user} />
+              <SideNav />
             </Grid>
             <Grid item xs className="mx-5 my-3">
               <Routes>
                 <Route path="/courses" element={<Courses />} />
-                {user.role === "prof" && (
+                {user.role !== "student" && (
                   <Route
                     path="/take-attendance/:courseId"
                     element={<TakeAttendance />}
@@ -41,15 +43,24 @@ const App = () => {
                 )}
                 {user.role === "student" && (
                   <Route
-                    path="/register-for-courses"
+                    path="/register"
                     element={<CoursesRegistrationForm />}
                   />
                 )}
-                <Route path="/courses/assignment" element={<Assignments />} />
+                {user.role === "student" && (
+                  <Route path="/feedback" element={<Feedback />} />
+                )}
+                <Route
+                  path="/courses/assignments/:id"
+                  element={<Assignments />}
+                />
                 <Route
                   path="/courses/assignment/view/:id"
                   element={<AssignmentView />}
                 />
+                {user.role === "admin" && (
+                  <Route path="/signup" element={<SignUp />} />
+                )}
               </Routes>
             </Grid>
           </Grid>

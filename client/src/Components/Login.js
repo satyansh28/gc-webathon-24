@@ -4,6 +4,7 @@ import Lottie from "react-lottie";
 import animationData from "../Animations/Animation.json";
 import "../Styles/Login.css";
 import UserContext from "./UserContext";
+import { useNavigate } from "react-router-dom";
 
 const defaultOptions = {
   loop: true,
@@ -15,15 +16,22 @@ const defaultOptions = {
 };
 
 const student_details = {
-  name: "shv12@iitbbs.ac.in",
+  email: "shv12@iitbbs.ac.in",
   role: "student",
   id: "19CS02004",
 };
 const professor_details = {
-  name: "spinsetty@iitbbs.ac.in",
+  email: "spinsetty@iitbbs.ac.in",
   role: "prof",
 };
+
+const admin_details = {
+  email: "jsk12@iitbbs.ac.in",
+  role: "admin",
+};
+
 const Login = () => {
+  const navigate = useNavigate();
   const { updateUser } = useContext(UserContext);
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
 
@@ -35,9 +43,12 @@ const Login = () => {
       updateUser(student_details);
     } else if (loginInfo.email === "spinsetty@iitbbs.ac.in") {
       updateUser(professor_details);
+    } else if (loginInfo.email === "jsk12@iitbbs.ac.in") {
+      updateUser(admin_details);
     }
     // console.log(user);
     console.log(loginInfo);
+    navigate("/courses");
   };
 
   return (

@@ -43,9 +43,6 @@ const Assignments = () => {
   const handleAssignmentView = (index) => {
     navigate(`/courses/assignment/view/${index + 1}`);
   };
-  if (user.role !== "prof") {
-    return <Typography>You are not authorized to access this page.</Typography>;
-  }
   return (
     <Box>
       <Typography variant="h4" className="oswald">
