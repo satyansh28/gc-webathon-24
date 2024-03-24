@@ -17,6 +17,7 @@ mongoose
     process.exit(1);
   });
 
+const academicsRoutes = require("./routes/academicsRoutes");
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -50,6 +51,7 @@ app.options("*", (req, res) => {
 });
 
 //routes
+app.use("/api/academics", academicsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/student",studentRoutes);
 app.use("/api/admin",adminRoutes);
