@@ -47,11 +47,14 @@ const Sections = {
 const SideNav = () => {
   const [active, setActive] = useState("Courses");
   const { user, updateUser } = useContext(UserContext);
-  const handleLogout = () => {
+  const handleLogout = async() => {
     // setUser(null);
+    await fetch(process.env.REACT_APP_BACKEND+"/api/auth/logout",{
+      credentials:'include'
+    })
+
     updateUser(null);
     //
-    // remove cookie
     //
     window.location.href = "/";
   };
@@ -83,7 +86,7 @@ const SideNav = () => {
                 </Grid>
                 <Grid item>
                   <Typography variant="h6" sx={{ color: "white" }}>
-                    John Doe
+                    {user.email}
                   </Typography>
                 </Grid>
               </Grid>

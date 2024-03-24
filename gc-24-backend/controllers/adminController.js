@@ -31,7 +31,7 @@ exports.getProfessors = async (req, res, next) => {
 };
 exports.getCourses = async (req, res, next) => {
   try {
-    const courseList = await Course.find()
+    const courseList = await Course.find().populate('instructor','firstName lastName email')
       .exec();
     res
       .status(200)

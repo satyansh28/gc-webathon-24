@@ -75,10 +75,10 @@ exports.applyCourses = async (req, res, next) => {
 
 exports.getMyCourses=async(req,res,next)=>{
     try{
-        const resultList= await studentCourse.find({studentId:req.user._id}).populate('courseId').exec()
+        const resultList= await studentCourse.find({studentId:req.user._id}).populate({path:'courseId',populate:{path:'instructor'}}).exec()
         res.status(200).json({
             courseList:resultList
-        }).send()
+        })
 
     }
     catch(err)

@@ -57,8 +57,18 @@ const Courses = () => {
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    // Get course data from API call
-    setCourses(coursesData);
+    fetch(process.env.REACT_APP_BACKEND+"/api/student/getMyCourses",{
+      credentials:'include',
+    }).then(res=>{
+      if(res.status===200)
+        return res.json()
+      else
+        window.location.href="/"
+    }).then((res)=>{
+      console.log(res.courseList)
+      setCourses(res.courseList)
+    })
+    //setCourses(coursesData);
   }, [user]);
 
   const CourseName = (props) => {
@@ -110,7 +120,7 @@ const Courses = () => {
   console.log(user);
   let coursesContent = <Typography>My courses</Typography>;
   if (courses == null) {
-    coursesContent = <Typography>Failed to Fetch courses</Typography>;
+    coursesContent = <Typography>Loading...</Typography>;
   } else if (user.role === "student") {
     coursesContent = courses.map((course, index) => {
       return (
@@ -118,8 +128,7 @@ const Courses = () => {
           <Card sx={{ minHeight: 700 }} key={index}>
             <Stack spacing={2}>
               <Box>
-                <CourseName courseName={course.courseName} />
-                <CourseId courseId={course.courseId} />
+                <CourseName courseName={course.courseId.name} />
               </Box>
               <Stack direction="row" spacing={2}>
                 <Typography
@@ -130,7 +139,7 @@ const Courses = () => {
                   Instructors:
                 </Typography>
                 <Box direction="column" spacing={1}>
-                  {course.professors.map((prof, index) => {
+                  {course.courseId.instructor.map((prof, index) => {
                     return (
                       <Typography
                         variant="subtitle1"
@@ -138,7 +147,7 @@ const Courses = () => {
                         sx={{ fontWeight: 600, fontSize: "1.05rem" }}
                         className="tauri-regular"
                       >
-                        {prof}
+                        {prof.firstName}
                       </Typography>
                     );
                   })}
@@ -147,7 +156,7 @@ const Courses = () => {
               <Button
                 variant="contained"
                 onClick={(event) => {
-                  handleViewAssignments(course.courseId);
+                  handleViewAssignments(course.courseId._id);
                   event.preventDefault();
                 }}
               >
@@ -165,12 +174,11 @@ const Courses = () => {
           <Card>
             <Stack direction="column" spacing={2}>
               <Box>
-                <CourseName courseName={course.courseName} />
+                <CourseName courseName={course.courseId.name} />
                 <Box
                   direction="row"
                   sx={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <CourseId courseId={course.courseId} />
                   <Typography
                     variant="subtitle1"
                     sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
@@ -184,7 +192,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleViewAssignments(course.courseId);
+                    handleViewAssignments(course.courseId._id);
                     event.preventDefault();
                   }}
                 >
@@ -193,7 +201,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleTakeAttendance(course.courseId);
+                    handleTakeAttendance(course.courseId._id);
                     event.preventDefault();
                   }}
                 >
@@ -202,7 +210,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleAssignGrade(course.courseId);
+                    handleAssignGrade(course.courseId._id);
                     event.preventDefault();
                   }}
                 >

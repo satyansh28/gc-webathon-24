@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "1000kb" }));
 const cors = (req, res, next) => {
   //res.header("Access-Control-Allow-Origin", process.env.FRONTEND);
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header(
     "Access-Control-Allow-Methods",
     "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE"
