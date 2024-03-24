@@ -8,10 +8,23 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  TextField,
+  DialogTitle,
 } from "@mui/material";
+<<<<<<< Updated upstream
 import React, { useContext, useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+=======
+import { Add } from "@mui/icons-material";
+import React, { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+>>>>>>> Stashed changes
 import UserContext from "../UserContext";
+import DatePicker from "react-datepicker";
 
 // const assigns = [
 //   {
@@ -36,9 +49,18 @@ import UserContext from "../UserContext";
 //   },
 // ];
 
+const defaultAssignmentDetail = {
+  topic: "",
+  dueDate: "12/10/2024",
+  points: 100,
+  url: "https://www.google.com",
+  question: "",
+};
+
 const Assignments = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+<<<<<<< Updated upstream
   const [assigns,setAssign]=useState([])
   const toDate=(date)=>{
     const ndate=new Date(date)
@@ -59,9 +81,17 @@ const Assignments = () => {
     })
     //setCourses(coursesData);
   }, [user]);
+=======
+  const [edit, setEdit] = useState(false);
+  const [assign, setAssign] = useState(defaultAssignmentDetail);
+>>>>>>> Stashed changes
   const handleAssignmentView = (index) => {
     navigate(`/courses/assignment/view/${index + 1}`);
   };
+  const handleClose = () => {
+    setEdit(false);
+  };
+
   return (
     <Box>
       <Typography variant="h4" className="oswald">
@@ -113,6 +143,87 @@ const Assignments = () => {
               <Divider />
             </>
           ))}
+          {user.role === "prof" && (
+            <Box className="d-flex justify-content-center my-3 mx-1">
+              <Button
+                sx={{ color: "black", borderColor: "black" }}
+                variant="outlined"
+                startIcon={<Add />}
+                onClick={(event) => {
+                  setEdit(true);
+                }}
+              >
+                Add
+              </Button>
+            </Box>
+          )}
+          <Dialog
+            open={edit}
+            onClose={() => setEdit(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth
+          >
+            <DialogTitle id="alert-dialog-title" className="tauri-regular">
+              Assignment Details
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                label="Topic"
+                variant="standard"
+                fullWidth
+                sx={{ mb: 4 }}
+                value={assign.topic}
+                onChange={(e) =>
+                  setAssign({ ...assign, topic: e.target.value })
+                }
+              />
+              <TextField
+                label="Question"
+                variant="standard"
+                multiline
+                maxRows={4}
+                fullWidth
+                sx={{ mb: 4 }}
+                value={assign.question}
+                onChange={(e) =>
+                  setAssign({ ...assign, question: e.target.value })
+                }
+              />
+              <TextField
+                label="Assignment URL"
+                variant="standard"
+                multiline
+                maxRows={4}
+                fullWidth
+                sx={{ mb: 4 }}
+                value={assign.url}
+                onChange={(e) => setAssign({ ...assign, url: e.target.value })}
+              />
+              <Typography>Due Date</Typography>
+              <DatePicker
+                selected={assign.dueDate}
+                onChange={(date) => setAssign({ ...assign, dueDate: date })}
+              />
+              <TextField
+                label="Points"
+                variant="standard"
+                fullWidth
+                sx={{ mb: 4, mt: 4 }}
+                value={assign.points}
+                onChange={(e) =>
+                  setAssign({ ...assign, points: e.target.value })
+                }
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setEdit(false)}>Cancel</Button>
+              <Button onClick={handleClose} autoFocus>
+                Save
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {/* <Divider /> */}
         </List>
       </Box>
     </Box>

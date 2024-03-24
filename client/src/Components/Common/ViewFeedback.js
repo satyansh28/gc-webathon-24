@@ -117,7 +117,9 @@ const CustomDialog = (props) => {
         open={openDialog}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {title}
+          <Typography className="tauri-regular" style={{ fontSize: "20px" }}>
+            {title}
+          </Typography>
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -132,7 +134,9 @@ const CustomDialog = (props) => {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>{body}</Typography>
+          <Typography className="tauri-regular" gutterBottom>
+            {body}
+          </Typography>
           {/* <Typography gutterBottom>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
             Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
@@ -160,7 +164,7 @@ const FeedbackItem = (props) => {
   const handleClick = () => {
     setOpenDialog(true);
   };
-  const marginTopValue = name === "" ? "2px" : "15px";
+  const marginTopValue = name === "" ? "2px" : "20px";
 
   return (
     <>
@@ -170,17 +174,25 @@ const FeedbackItem = (props) => {
       >
         <Box className="d-flex flex-column justify-content-center">
           <AccountBoxIcon
-            style={{ marginTop: `${marginTopValue}`, marginRight: "10px" }}
+            sx={{ height: "100%" }}
+            style={{ marginTop: `${marginTopValue}`, marginRight: "15px" }}
           />
         </Box>
         <ListItemText
-          style={{ width: "100%", fontSize: "2em" }}
+          style={{ width: "100%" }}
           onClick={handleClick}
-          primary={<Typography className="Tauri">{name}</Typography>}
+          primary={
+            <Typography
+              style={{ fontSize: "17px", fontWeight: 700 }}
+              className="tauri-regular"
+            >
+              {name}
+            </Typography>
+          }
           secondary={
             <Box>
               <Typography
-                className="text"
+                className="text tauri-regular"
                 // sx={{ display: "inline" }}
                 // component="span"
                 variant="body2"
@@ -190,6 +202,9 @@ const FeedbackItem = (props) => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   fontSize: "1em",
+                  marginTop: "7px",
+                  fontWeight: 300,
+                  //   marginLeft: "5px",
                 }}
               >
                 {text}
