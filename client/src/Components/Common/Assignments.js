@@ -15,16 +15,11 @@ import {
   TextField,
   DialogTitle,
 } from "@mui/material";
-<<<<<<< Updated upstream
-import React, { useContext, useState,useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-=======
-import { Add } from "@mui/icons-material";
-import React, { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
->>>>>>> Stashed changes
+import React, { useContext, useState, useEffect } from "react";
 import UserContext from "../UserContext";
 import DatePicker from "react-datepicker";
+import { Add } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
 
 // const assigns = [
 //   {
@@ -60,31 +55,32 @@ const defaultAssignmentDetail = {
 const Assignments = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-<<<<<<< Updated upstream
-  const [assigns,setAssign]=useState([])
-  const toDate=(date)=>{
-    const ndate=new Date(date)
-    return ndate.toLocaleString()
-  }
-  useEffect(() => {
-    fetch(process.env.REACT_APP_BACKEND+"/api/student/getMyAssignments?courseId="+window.location.href.split("/").pop()
-    ,{
-      credentials:'include',
-    }).then(res=>{
-      if(res.status===200)
-        return res.json()
-      else
-        window.location.href="/"
-    }).then((res)=>{
-      console.log(res.assignmentList)
-      setAssign(res.assignmentList)
-    })
-    //setCourses(coursesData);
-  }, [user]);
-=======
+  const [assigns, setAssigns] = useState([]);
   const [edit, setEdit] = useState(false);
   const [assign, setAssign] = useState(defaultAssignmentDetail);
->>>>>>> Stashed changes
+  const toDate = (date) => {
+    const ndate = new Date(date);
+    return ndate.toLocaleString();
+  };
+  useEffect(() => {
+    fetch(
+      process.env.REACT_APP_BACKEND +
+        "/api/student/getMyAssignments?courseId=" +
+        window.location.href.split("/").pop(),
+      {
+        credentials: "include",
+      }
+    )
+      .then((res) => {
+        if (res.status === 200) return res.json();
+        else window.location.href = "/";
+      })
+      .then((res) => {
+        console.log(res.assignmentList);
+        setAssigns(res.assignmentList);
+      });
+    //setCourses(coursesData);
+  }, [user]);
   const handleAssignmentView = (index) => {
     navigate(`/courses/assignment/view/${index + 1}`);
   };
