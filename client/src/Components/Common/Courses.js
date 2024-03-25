@@ -57,7 +57,8 @@ const Courses = () => {
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_BACKEND + "/api/student/getMyCourses", {
+    if(user.role==="student"){
+      fetch(process.env.REACT_APP_BACKEND + "/api/student/getMyCourses", {
       credentials: "include",
     })
       .then((res) => {
@@ -68,6 +69,21 @@ const Courses = () => {
         console.log(res.courseList);
         setCourses(res.courseList);
       });
+    }
+    else if(user.role==="admin"){
+      fetch(process.env.REACT_APP_BACKEND + "/api/admin/getCourses", {
+        credentials: "include",
+      })
+      .then((res) => {
+          if (res.status === 200) return res.json();
+          else window.location.href = "/";
+      })
+      .then((res) => {
+          console.log(res.courseList);
+          setCourses(res.courseList);
+      });
+      
+    }
     //setCourses(coursesData);
   }, [user]);
 
@@ -183,7 +199,7 @@ const Courses = () => {
           <Card>
             <Stack direction="column" spacing={2}>
               <Box>
-                <CourseName courseName={course.courseId.name} />
+                <CourseName courseName={course.name} />
                 <Box
                   direction="row"
                   sx={{ display: "flex", justifyContent: "space-between" }}
@@ -193,7 +209,7 @@ const Courses = () => {
                     sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
                     className="tauri-regular"
                   >
-                    Strength: {course.enrolledCount}
+                    Strength: 60
                   </Typography>
                 </Box>
               </Box>
@@ -201,7 +217,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleViewAssignments(course.courseId._id);
+                    handleViewAssignments(course._id);
                     event.preventDefault();
                   }}
                 >
@@ -210,7 +226,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleTakeAttendance(course.courseId._id);
+                    handleTakeAttendance(course._id);
                     event.preventDefault();
                   }}
                 >
@@ -219,7 +235,7 @@ const Courses = () => {
                 <Button
                   variant="contained"
                   onClick={(event) => {
-                    handleAssignGrade(course.courseId._id);
+                    handleAssignGrade(course._id);
                     event.preventDefault();
                   }}
                 >

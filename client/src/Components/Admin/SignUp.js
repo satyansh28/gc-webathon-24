@@ -11,6 +11,8 @@ import {
   Button,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+const newUser={firstName:"",lastName:"",role:"student",email:"",Branch:""}
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 1000,
@@ -36,12 +38,45 @@ const password = generateRandomPassword(12); // Generates a random password of l
 console.log(password);
 
 const SignUp = () => {
-  const [checked, setChecked] = React.useState(false);
+  const navigate = useNavigate();
 
+  const [checked, setChecked] = React.useState(false);
+  const addUser=()=>{
+    newUser.role=checked?"staff":"student"
+    console.log(newUser)
+
+    if(!(newUser.firstName!=="" && newUser.lastName!=="" && newUser.email!==""))
+      alert("Please fill in all details")
+    else{
+      const password=generateRandomPassword(10);
+      newUser.password=password
+      fetch(process.env.REACT_APP_BACKEND+"/api/auth/register",{
+        method:"POST",
+        credentials:"include",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({userData:newUser})
+      }).then(res=>{      
+        alert("Password generated and sent via email:"+password)
+        navigate("/courses")
+    })
+    }
+
+  }
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
-
+  const setFirstName=(e)=>{
+    newUser.firstName=e.target.value
+  }
+  const setLastName=(e)=>{
+    newUser.lastName=e.target.value
+  }
+  const setEmail=(e)=>{
+    newUser.email=e.target.value
+  }
   return (
     <Box className="d-flex justify-content-center">
       <DemoPaper
@@ -65,12 +100,12 @@ const SignUp = () => {
               inputProps={{ "aria-label": "controlled" }}
             />
           </Box>
-          <Stack direction="row" className="d-flex justify-content-between">
-            <TextField required id="outlined-required" label="First Name" />
-            <TextField required id="outlined-required" label="Middle Name" />
-            <TextField required id="outlined-required" label="Last Name" />
+          <Stack direction="row" className="justify-content-between">
+            <TextField width="40" onChange={setFirstName} required id="outlined-required" label="First Name" />
+            <TextField width="40" onChange={setLastName} required id="outlined-required" label="Last Name" />
           </Stack>
           <TextField
+            onChange={setEmail}
             required
             id="outlined-required"
             label="Institute email-id"
@@ -80,7 +115,7 @@ const SignUp = () => {
           )}
           <TextField required id="outlined-required" label="Branch" />
           <Box className="d-flex justify-content-end">
-            <Button variant="outlined" startIcon={<Add />}>
+            <Button variant="outlined" onClick={addUser} startIcon={<Add />}>
               Add
             </Button>
           </Box>
