@@ -51,7 +51,7 @@ exports.getFeedbacks = async (req, res, next) => {
       .exec();
     const courseList = await feedback
       .find({ reviewType: "course" })
-      .populate({ path: "actorId", model: course })
+      .populate({ path: "actorId", model: Course })
       .exec();
     const eventList = await feedback.find({ reviewType: "event" }).exec();
     res
