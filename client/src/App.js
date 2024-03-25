@@ -16,6 +16,7 @@ import Profile from "./Components/Common/Profile";
 import ViewFeedback from "./Components/Common/ViewFeedback";
 import AddCourse from "./Components/Admin/AddCourse";
 import Grade from "./Components/Common/Grade";
+import Equipment from "./Components/Students/Equipment";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -52,7 +53,10 @@ const App = () => {
                   />
                 )}
                 {user.role === "student" && (
-                  <Route path="/feedback" element={<Feedback />} />
+                  <>
+                    <Route path="/feedback" element={<Feedback />} />
+                    <Route path="/sac" element={<Equipment />} />
+                  </>
                 )}
                 {user.role !== "student" && (
                   <>

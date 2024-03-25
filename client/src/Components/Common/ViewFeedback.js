@@ -227,23 +227,30 @@ const ViewFeedback = () => {
       setFeedbacks(profFeedbackData);
     } else if (user.role === "admin") {
       // setFeedbacks(adminFeedbackData);
-      fetch(process.env.REACT_APP_BACKEND+"/api/admin/getFeedbacks",{
-        credentials:'include'
-      }).then(res=>{
-        if(res.status===200)
-          return res.json()
-        else{
-          window.location.href="/"
-        }
-      }).then(res=>{
-        console.log(res)
-        setFeedbacks({
-          Course:res.courseList.map(event=>{return {name:event.actorId.name,text:event.review}}),
-          Professor:res.proffesorList.map(event=>{return {name:event.actorId.firstName+" "+event.actorId.lastName,text:event.review}}),
-          CampusEvents:res.eventList
-        })
-        
+      fetch(process.env.REACT_APP_BACKEND + "/api/admin/getFeedbacks", {
+        credentials: "include",
       })
+        .then((res) => {
+          if (res.status === 200) return res.json();
+          else {
+            window.location.href = "/";
+          }
+        })
+        .then((res) => {
+          console.log(res);
+          setFeedbacks({
+            Course: res.courseList.map((event) => {
+              return { name: event.actorId.name, text: event.review };
+            }),
+            Professor: res.proffesorList.map((event) => {
+              return {
+                name: event.actorId.firstName + " " + event.actorId.lastName,
+                text: event.review,
+              };
+            }),
+            CampusEvents: res.eventList,
+          });
+        });
     }
   }, []);
 
