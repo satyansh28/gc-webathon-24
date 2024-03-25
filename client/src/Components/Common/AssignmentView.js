@@ -125,7 +125,9 @@ const Submission = ({ user, points, studentId }) => {
 	};
 
 	// IF NO STUDENT IS SELECTED SHOW MESSAGE
-	if (studentId === -1 && user.role === "prof") {
+
+	if (studentId === -1 && user.role !== "student") {
+
 		return (
 			<Box
 				className="d-flex align-items-center justify-content-center flex-column"
@@ -140,7 +142,8 @@ const Submission = ({ user, points, studentId }) => {
 
 	return (
 		<Box className="d-flex align-items-center flex-column">
-			{user.role === "prof" && (
+
+			{user.role !== "student" && (
 				<Box sx={{ mt: 3, width: "100%" }}>
 					<Typography className="tauri-regular">
 						{students[studentId]}
@@ -149,7 +152,7 @@ const Submission = ({ user, points, studentId }) => {
 			)}
 			{/* SUBMISSION URL */}
 			<Box
-				sx={{ mt: user.role === "prof" ? 2 : 5, width: "70%" }}
+				sx={{ mt: user.role !== "student" ? 2 : 5, width: "70%" }}
 				className="d-flex align-items-center justify-content-around"
 			>
 				{submission.url && (
@@ -276,7 +279,9 @@ const AssignmentView = () => {
 	const handleAssignClose = () => {
 		// backend call
 		// write backend query to save changes to the assignment
-    // store to assign state variable
+
+		// store to assign state variable
+
 		setAssign(editAssign);
 		setEdit(false);
 	};
@@ -343,7 +348,8 @@ const AssignmentView = () => {
 							Points: {assign.points}
 						</Typography>
 					</Box>
-					{user.role === "prof" && (
+
+					{user.role !== "student" && (
 						<Button
 							variant="contained"
 							startIcon={<Edit />}
@@ -426,12 +432,15 @@ const AssignmentView = () => {
 				</Grid>
 			</Grid>
 			<Grid container spacing={2} className="flex-grow-1 overflow-hidden">
-				{user.role === "prof" && (
+
+				{user.role !== "student" && (
 					<Grid item xs={5} sx={{ height: "100%" }}>
 						<StudentList setStudent={setActiveStu} />
 					</Grid>
 				)}
-				<Grid item xs={user.role === "prof" ? 7 : 12}>
+
+				<Grid item xs={user.role !== "student" ? 7 : 12}>
+
 					<Submission
 						user={user}
 						points={assign.points}

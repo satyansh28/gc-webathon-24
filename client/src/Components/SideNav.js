@@ -116,21 +116,15 @@ const SideNav = () => {
 							</Grid>
 						</AccordionSummary>
 						<AccordionDetails>
-							<Box sx={{ px: 2, py: 1 }} className="rounded">
-								<Link to="/view_profile" className="text-decoration-none">
-									<Typography variant="button" sx={{ color: "black" }}>
+
+							<Link to="/view_profile" className="text-decoration-none">
+								<Box sx={{ px: 2, py: 1 }} className="rounded">
+									<Typography variant="button" sx={{ color: "white" }}>
 										View Profile
 									</Typography>
-								</Link>
-							</Box>
-							<Divider />
-							<Box sx={{ mt: 1, px: 2, py: 1 }} className="rounded">
-								<Link to="/edit_profile" className="text-decoration-none">
-									<Typography variant="button" sx={{ color: "black" }}>
-										Edit Profile
-									</Typography>
-								</Link>
-							</Box>
+								</Box>
+							</Link>
+
 						</AccordionDetails>
 					</Accordion>
 				</Box>
