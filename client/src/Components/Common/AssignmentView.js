@@ -113,7 +113,7 @@ const Submission = ({ user, points, studentId }) => {
 	};
 
 	const handleSubmit = () => {
-		if (user.role !== "student") {
+		if (user.role === "student") {
 			console.log("Student Submission", submission);
 			// backend call
 			// make api call to submit the assignment
@@ -125,7 +125,7 @@ const Submission = ({ user, points, studentId }) => {
 	};
 
 	// IF NO STUDENT IS SELECTED SHOW MESSAGE
-	if (studentId === -1 && user.role !== "prof") {
+	if (studentId === -1 && user.role === "prof") {
 		return (
 			<Box
 				className="d-flex align-items-center justify-content-center flex-column"
@@ -140,7 +140,7 @@ const Submission = ({ user, points, studentId }) => {
 
 	return (
 		<Box className="d-flex align-items-center flex-column">
-			{user.role !== "prof" && (
+			{user.role === "prof" && (
 				<Box sx={{ mt: 3, width: "100%" }}>
 					<Typography className="tauri-regular">
 						{students[studentId]}
@@ -149,7 +149,7 @@ const Submission = ({ user, points, studentId }) => {
 			)}
 			{/* SUBMISSION URL */}
 			<Box
-				sx={{ mt: user.role !== "prof" ? 2 : 5, width: "70%" }}
+				sx={{ mt: user.role === "prof" ? 2 : 5, width: "70%" }}
 				className="d-flex align-items-center justify-content-around"
 			>
 				{submission.url && (
@@ -167,7 +167,7 @@ const Submission = ({ user, points, studentId }) => {
 					</Link>
 				)}
 				{/* BUTTON TO UPLOAD ANSWER */}
-				{user.role !== "student" && (
+				{user.role === "student" && (
 					<Button
 						variant="outlined"
 						color="secondary"
@@ -231,7 +231,7 @@ const Submission = ({ user, points, studentId }) => {
 			)}
 			{/* SCORE FOR ASSIGNMENT */}
 			<Box sx={{ mt: 5 }}>
-				{user.role !== "prof" ? (
+				{user.role === "prof" ? (
 					<TextField
 						label="Score"
 						sx={{ m: 1 }}
@@ -343,7 +343,7 @@ const AssignmentView = () => {
 							Points: {assign.points}
 						</Typography>
 					</Box>
-					{user.role !== "prof" && (
+					{user.role === "prof" && (
 						<Button
 							variant="contained"
 							startIcon={<Edit />}
@@ -426,12 +426,12 @@ const AssignmentView = () => {
 				</Grid>
 			</Grid>
 			<Grid container spacing={2} className="flex-grow-1 overflow-hidden">
-				{user.role !== "prof" && (
+				{user.role === "prof" && (
 					<Grid item xs={5} sx={{ height: "100%" }}>
 						<StudentList setStudent={setActiveStu} />
 					</Grid>
 				)}
-				<Grid item xs={user.role !== "prof" ? 7 : 12}>
+				<Grid item xs={user.role === "prof" ? 7 : 12}>
 					<Submission
 						user={user}
 						points={assign.points}
