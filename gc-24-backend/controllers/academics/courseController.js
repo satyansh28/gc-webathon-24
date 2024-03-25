@@ -65,7 +65,9 @@ exports.getCourseStudents = [
     const courseId = req.params.id;
 
     try {
-      const students = await StudentCourse.find({ courseId: courseId }).exec();
+      const students = await StudentCourse.find({ courseId: courseId })
+        .populate("studentId")
+        .exec();
       res.status(200).json(students);
     } catch (err) {
       console.error("Could not access Courses");
