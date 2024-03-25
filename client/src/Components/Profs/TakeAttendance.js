@@ -35,14 +35,7 @@ const theme = createTheme({
   },
 });
 
-const studentsData = [
-  { name: "Sai Rohan", roll_no: "19CS02004" },
-  { name: "Anuj Choure", roll_no: "19CS02010" },
-  { name: "Harshit Sapkal", roll_no: "19CS02011" },
-  { name: "Sai Krishna", roll_no: "19CS02001" },
-  { name: "Jogendra Prasad", roll_no: "19CS02007" },
-  { name: "Koushik Kumar", roll_no: "19CS02006" },
-];
+const studentsData = [];
 
 const TakeAttendance = () => {
   const { courseId } = useParams();
@@ -54,13 +47,28 @@ const TakeAttendance = () => {
 
   useEffect(() => {
     // api call to fetch student data enrolled in course with course id {courseID}
+    fetch(
+      `${process.env.REACT_APP_BACKEND}/api/academics/courses/${courseId}/students`,
+      { credentials: "include" }
+    )
+      .then((res) => res.json())
+      .then((courseStudents) => {
+        const studentData = courseStudents.map((courseStudent) => ({
+          id: `${courseStudent.studentId._id}`,
+          name: `${courseStudent.studentId.firstName} ${courseStudent.studentId.lastName}`,
+          roll_no: courseStudent.studentId.email.split("@")[0].toUpperCase(),
+        }));
+        console.log(studentData);
+        setStudentsDetails(studentData);
+      });
+
     setStudentsDetails(studentsData);
     const newAttendanceDetails = studentsData.map((el) => {
       return "A";
     });
     setAttendanceDetails(newAttendanceDetails);
     setLoading(false);
-  }, [studentsDetails]);
+  }, [courseId]);
 
   const updateAttendanceUsingIndex = (updateIndex) => {
     let newAttendanceDetails = [...attendanceDetails];
@@ -69,9 +77,27 @@ const TakeAttendance = () => {
     setAttendanceDetails(newAttendanceDetails);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     // api call to send the attendance details to backend
     event.preventDefault();
+
+    const attendance = studentsDetails
+      .filter((_student, index) => attendanceDetails[index] === "P")
+      .map((student) => student.id);
+
+    await fetch(
+      `${process.env.REACT_APP_BACKEND}/api/academics/courses/${courseId}/attendance`,
+      {
+        method: "POST",
+        body: JSON.stringify({ students: attendance }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+
     setShouldRedirect(true);
   };
 

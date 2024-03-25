@@ -39,14 +39,7 @@ const theme = createTheme({
 	},
 });
 
-const studentsData = [
-	{ name: "Sai Rohan", roll_no: "19CS02004" },
-	{ name: "Anuj Choure", roll_no: "19CS02010" },
-	{ name: "Harshit Sapkal", roll_no: "19CS02011" },
-	{ name: "Sai Krishna", roll_no: "19CS02001" },
-	{ name: "Jogendra Prasad", roll_no: "19CS02007" },
-	{ name: "Koushik Kumar", roll_no: "19CS02006" },
-];
+const studentsData = [];
 
 const gradeOptions = ["A", "B", "C", "D", "P", "F"];
 
@@ -106,30 +99,59 @@ const SelectOption = (props) => {
 
 const Grade = () => {
 	const navigate = useNavigate();
-	const { courseId } = useParams();
-	const [studentsAllOptions, setStudentsAllOptions] = useState(null);
-	const [selectedStudents, setSelectedStudents] = useState(null);
+	const { id: courseId } = useParams();
+	const [studentsAllOptions, setStudentsAllOptions] = useState([]);
+	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
-		const updatedStudentsAllOptions = studentsData.map((student) => {
-			return gradeOptions.map((grade) => {
-				return { ...student, grade: grade };
+		// api call to fetch student data enrolled in course with course id {courseID}
+		fetch(
+			`${process.env.REACT_APP_BACKEND}/api/academics/courses/${courseId}/students`,
+			{ credentials: "include" }
+		)
+			.then((res) => res.json())
+			.then((courseStudents) => {
+				const studentData = courseStudents.map((courseStudent) => ({
+					id: `${courseStudent.studentId._id}`,
+					name: `${courseStudent.studentId.firstName} ${courseStudent.studentId.lastName}`,
+					roll_no: courseStudent.studentId.email.split("@")[0].toUpperCase(),
+				}));
+				const updatedStudentsAllOptions = studentData.map((student) => {
+					return gradeOptions.map((grade) => {
+						return { ...student, grade: grade };
+					});
+				});
+				setStudentsAllOptions(updatedStudentsAllOptions);
+				const initalSelectedStudents = updatedStudentsAllOptions.map(
+					(studentAllOptions) => {
+						return studentAllOptions[1];
+					}
+				);
+				setSelectedStudents(initalSelectedStudents);
+				setIsLoading(false);
 			});
-		});
-		setStudentsAllOptions(updatedStudentsAllOptions);
-		const initalSelectedStudents = updatedStudentsAllOptions.map(
-			(studentAllOptions) => {
-				return studentAllOptions[1];
+	}, [courseId]);
+
+	const handleSubmit = async (event) => {
+		// api call to send the grade details to backend
+		event.preventDefault();
+		const gradeData = Object.fromEntries(
+			selectedStudents.map(student => [student.id, student.grade])
+		);
+
+		await fetch(
+			`${process.env.REACT_APP_BACKEND}/api/academics/courses/${courseId}/grade`,
+			{
+				method: "POST",
+				body: JSON.stringify({ grades: gradeData }),
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
 			}
 		);
-		setSelectedStudents(initalSelectedStudents);
-		setIsLoading(false);
-	}, []);
 
-	const handleSubmit = (event) => {
-		// api call to send the grade details to backend
-		console.log(selectedStudents);
-		event.preventDefault();
 		navigate("/courses");
 	};
 
