@@ -189,6 +189,15 @@ const Courses = () => {
                 Attendance: {course.attendedClasses}/
                 {course.courseId.numberOfClasses}
               </Typography>
+              { 
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
+                className="tauri-regular"
+              >
+                Grade: {course.grade || "-"}
+              </Typography>
+              }
               <Button
                 variant="contained"
                 onClick={(event) => {
