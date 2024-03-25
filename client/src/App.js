@@ -15,6 +15,7 @@ import Feedback from "./Components/Students/Feedback";
 import Profile from "./Components/Common/Profile";
 import ViewFeedback from "./Components/Common/ViewFeedback";
 import AddCourse from "./Components/Admin/AddCourse";
+import Grade from "./Components/Common/Grade";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -54,7 +55,13 @@ const App = () => {
                   <Route path="/feedback" element={<Feedback />} />
                 )}
                 {user.role !== "student" && (
-                  <Route path="/view-feedback" element={<ViewFeedback />} />
+                  <>
+                    <Route path="/view-feedback" element={<ViewFeedback />} />
+                    <Route
+                      path="/courses/assign-grade/:id"
+                      element={<Grade />}
+                    />
+                  </>
                 )}
                 <Route path="/view_profile" element={<Profile />} />
                 <Route

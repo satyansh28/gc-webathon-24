@@ -57,32 +57,30 @@ const Courses = () => {
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    if(user.role==="student"){
+    if (user.role === "student") {
       fetch(process.env.REACT_APP_BACKEND + "/api/student/getMyCourses", {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else window.location.href = "/";
+        credentials: "include",
       })
-      .then((res) => {
-        console.log(res.courseList);
-        setCourses(res.courseList);
-      });
-    }
-    else if(user.role==="admin"){
+        .then((res) => {
+          if (res.status === 200) return res.json();
+          else window.location.href = "/";
+        })
+        .then((res) => {
+          console.log(res.courseList);
+          setCourses(res.courseList);
+        });
+    } else if (user.role === "admin") {
       fetch(process.env.REACT_APP_BACKEND + "/api/admin/getCourses", {
         credentials: "include",
       })
-      .then((res) => {
+        .then((res) => {
           if (res.status === 200) return res.json();
           else window.location.href = "/";
-      })
-      .then((res) => {
+        })
+        .then((res) => {
           console.log(res.courseList);
           setCourses(res.courseList);
-      });
-      
+        });
     }
     //setCourses(coursesData);
   }, [user]);
@@ -118,8 +116,9 @@ const Courses = () => {
   };
 
   const handleAssignGrade = (courseId) => {
-    setShouldRedirect(false);
+    setShouldRedirect(true);
     // setRedirectPath(`/courses/assignment/view/${courseId}`);
+    setRedirectPath(`/courses/assign-grade/${courseId}`);
   };
 
   const handleViewAssignments = (courseId) => {
