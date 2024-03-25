@@ -22,7 +22,7 @@ const user_schema = new schema(
       minlength: 8,
     },
     dob:{
-      type:Date,
+      type:String,
     },
     firstName:{
       type:String

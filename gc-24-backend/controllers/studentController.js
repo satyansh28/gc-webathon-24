@@ -13,8 +13,7 @@ exports.editDetails = async (req, res, next) => {
     const keys = Object.keys(userData);
     keys.forEach((field) => {
       if (!["dob", "profilePic", "firstName", "lastName"].includes(field)) {
-        res.status(400).send();
-        return;
+        
       } else {
         req.user[field] = userData[field];
       }

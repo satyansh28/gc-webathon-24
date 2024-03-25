@@ -78,3 +78,8 @@ exports.resetPassword = async (req, res, next) => {
     res.status(400).send();
   }
 };
+
+exports.myProfile=async(req,res,next)=>{
+
+  res.status(200).json({...req.user._doc,password:null})
+}
