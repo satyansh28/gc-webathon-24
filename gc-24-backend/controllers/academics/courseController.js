@@ -112,3 +112,42 @@ exports.addAttendance = [
     }
   },
 ];
+
+exports.gradeCourseStudents = [
+  checkLogin,
+  checkStaff,
+  async (req, res) => {
+    if (
+      !(
+        "id" in req.params &&
+        isMongoId(req.params.id) &&
+        "grades" in req.body &&
+        typeof req.body.grades === "object" &&
+        Object.entries(req.body.grades).every(
+          ([key, value]) =>
+            typeof key === "string" &&
+            isMongoId(key) &&
+            typeof value === "string" &&
+            ["A", "B", "C", "D", "P", "F"].includes(value)
+        )
+      )
+    ) {
+      res.status(400).send();
+      return;
+    }
+
+    const courseId = req.params.id;
+
+    const updates = await Promise.all(
+      Object.entries(req.body.grades).map(([key, value]) => {
+        console.log({ courseId: courseId, studentId: key });
+        return StudentCourse.findOneAndUpdate(
+          { courseId: courseId, studentId: key },
+          { $set: { grade: value } }
+        ).exec();
+      })
+    );
+
+    res.status(200).json(updates);
+  },
+];
