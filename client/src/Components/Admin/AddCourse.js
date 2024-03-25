@@ -107,15 +107,41 @@ const AddCourse = () => {
   // console.log(professorsData);
   useEffect(() => {
     console.log(professorsData);
-    setProfessors(professorsData);
+    fetch(process.env.REACT_APP_BACKEND+"/api/admin/getProfessors",{credentials:'include'})
+    .then(res=>{
+      if(res.status===200)
+        return res.json()
+      else
+        window.location.href="/"
+    }).then((res)=>{
+      console.log(res.professorList)
+      setProfessors(res.professorList.map(prof=>{return {name:prof.firstName+" "+prof.lastName,id:prof._id}}))
+      setIsLoading(false);
+    })
+    //setProfessors(professorsData);
     // setSelectedProfessor(professors[0]);
-    setIsLoading(false);
+    
   }, []);
 
   const handleSubmit = (event) => {
-    // api call to add the course
+    console.log(selectedProfessor)
+    fetch(process.env.REACT_APP_BACKEND+"/api/admin/addCourse",{
+      method:"POST",
+      credentials:'include',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseDetails:{
+        year:year,
+        semester:semester.name,
+        name:name,
+        instructor:[selectedProfessor.id],
+        credit:credit
+      } }),
+    })//.then((res) => navigate("/courses"));
     event.preventDefault();
-    navigate("/courses");
+    //navigate("/courses");
   };
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -171,14 +197,14 @@ const AddCourse = () => {
               setSelectedOption={setStatus}
               displayText="Status"
             />
-            <TextField
+            {/* <TextField
               required
               id="outlined-required"
               label="Number of classes"
               onChange={(event) => {
                 setNumberOfClasses(parseInt(event.target.value));
               }}
-            />
+            /> */}
             <SelectOption
               options={professors}
               selectedOption={selectedProfessor}

@@ -262,6 +262,7 @@ const Feedback = () => {
     //navigate("/courses");
   };
   if (isLoading) {
+    
     return <Typography>Loading...</Typography>;
   }
   return (

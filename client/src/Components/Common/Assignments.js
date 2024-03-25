@@ -106,7 +106,7 @@ const Assignments = () => {
                     primary={
                       <Box className="d-flex justify-content-between align-items-center">
                         <Typography className="tauri-regular" component="div">
-                          {assign.assignmentId.topic}
+                          {assign.topic}
                         </Typography>
                         <Box>
                           <Typography
@@ -117,7 +117,7 @@ const Assignments = () => {
                             }}
                             component="div"
                           >
-                            Due: {toDate(assign.assignmentId.dueDate)}
+                            Due: {toDate(assign.dueDate)}
                           </Typography>
                           <Typography
                             className="tauri-regular"
