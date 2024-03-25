@@ -18,7 +18,7 @@ exports.getAllAssignments = [
       const course = await Course.findOne({
         _id: courseId,
         instructor: {
-          $elemMatch: req.user._id,
+          $elemMatch: { $eq: req.user._id },
         },
       }).exec();
 
@@ -55,7 +55,7 @@ exports.getAssignment = [
       const course = await Course.findOne({
         _id: courseId,
         instructor: {
-          $elemMatch: req.user._id,
+          $elemMatch: { $eq: req.user._id },
         },
       }).exec();
 
@@ -91,7 +91,7 @@ exports.createAssignment = [
       const course = await Course.findOne({
         _id: courseId,
         instructor: {
-          $elemMatch: req.user._id,
+          $elemMatch: { $eq: req.user._id },
         },
       }).exec();
 
