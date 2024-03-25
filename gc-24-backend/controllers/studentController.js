@@ -96,7 +96,9 @@ exports.getMyCourses=async(req,res,next)=>{
 exports.myAssignments=async(req,res,next)=>{
     
     try{
-        const findFilter={studentId:req.user._id}
+        const findFilter={}
+        if(!(req.user.role==="admin" || req.user.role==="staff"))
+          findFilter.studentId=req.user._id
         if(req.query.assignmentId)
             findFilter.assignmentId=req.query.assignmentId     
         let resultList=await studentAssignment.find(findFilter).populate('assignmentId').exec()

@@ -23,7 +23,6 @@ exports.getProfessors = async (req, res, next) => {
       .json({
         professorList: profList,
       })
-      .send();
   } catch (err) {
     console.log(err);
     res.status(400).send();
@@ -39,7 +38,6 @@ exports.getCourses = async (req, res, next) => {
       .json({
         courseList: courseList,
       })
-      .send();
   } catch (err) {
     console.log(err);
     res.status(400).send();
@@ -63,7 +61,6 @@ exports.getFeedbacks = async (req, res, next) => {
         courseList,
         eventList,
       })
-      .send();
   } catch (error) {
     console.log(error);
     res.status(400).send();
