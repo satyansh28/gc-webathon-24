@@ -17,7 +17,7 @@ import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAuto
 import { styled } from "@mui/system";
 import { Margin, Send } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-let text=""
+let text = "";
 const blue = {
   100: "#DAECFF",
   200: "#b6daff",
@@ -86,7 +86,6 @@ const bull = (
 );
 
 const SelectOption = (props) => {
-  
   const { selectedOption, displayText, setSelectedOption, options } = props;
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -193,27 +192,25 @@ const Feedback = () => {
 
   useEffect(() => {
     // api call to get courses and professors
-    fetch(process.env.REACT_APP_BACKEND+"/api/student/getFeedbackables",{
-      credentials:'include'
+    fetch(process.env.REACT_APP_BACKEND + "/api/student/getFeedbackables", {
+      credentials: "include",
     })
-    .then(res=>{
-      if(res.status===200)
-        return res.json()
-      else
-        window.location.href="/"
-    }).then(res=>{
-      console.log(res)
-      setProfessors(res.profList|| [])
-      setCourses(res.courseList || [])
-      setIsLoading(false);
-    })
-
+      .then((res) => {
+        if (res.status === 200) return res.json();
+        else window.location.href = "/";
+      })
+      .then((res) => {
+        console.log(res);
+        setProfessors(res.profList || []);
+        setCourses(res.courseList || []);
+        setIsLoading(false);
+      });
   }, []);
   const professorsNames =
     professors === null
       ? []
       : professors.map((professor) => {
-          return professor.firstName+" "+professor.lastName;
+          return professor.firstName + " " + professor.lastName;
         });
   const coursesNames =
     courses === null
@@ -221,45 +218,46 @@ const Feedback = () => {
       : courses.map((course) => {
           return course.name;
         });
-  const updateText=(e)=>{
-    text=e.target.value
-  }
+  const updateText = (e) => {
+    text = e.target.value;
+  };
   const handleSubmit = (event) => {
-    console.log(text)
-    if(text==="")
-      return
-    let type="None"
-    let actorId=null
+    console.log(text);
+    if (text === "") return;
+    let type = "None";
+    let actorId = null;
     if (selectedFeedbackType === "Professor") {
-      type="staff"
-      professors.forEach((professor)=>{
-        if(professor.firstName+" "+professor.lastName===selectedProfessor)
-          actorId=professor._id
-      })
+      type = "staff";
+      professors.forEach((professor) => {
+        if (
+          professor.firstName + " " + professor.lastName ===
+          selectedProfessor
+        )
+          actorId = professor._id;
+      });
       // api call to the add the feedback in those of the respective professor
     } else if (selectedFeedbackType === "Course") {
-      type="course"
-      courses.forEach((course)=>{
-        if(course.name===selectedCourse)
-          actorId=course._id
-      })
+      type = "course";
+      courses.forEach((course) => {
+        if (course.name === selectedCourse) actorId = course._id;
+      });
       // api call to the add the feedback in those of the respective professor
     } else if (
       selectedFeedbackType === "Campus Events" ||
       selectedFeedbackType === "Facilities"
     ) {
-      type="event"
+      type = "event";
       // api call to the add the feedback in those of the respective professor
     }
-    fetch(process.env.REACT_APP_BACKEND+"/api/student/giveFeedback",{
-      method:"POST",
-      credentials:'include',
+    fetch(process.env.REACT_APP_BACKEND + "/api/student/giveFeedback", {
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify({actorId,type,review:text})
-    }).then(res=>navigate("/courses"));
+      body: JSON.stringify({ actorId, type, review: text }),
+    }).then((res) => navigate("/courses"));
     event.preventDefault();
     //navigate("/courses");
   };
@@ -329,7 +327,6 @@ const Feedback = () => {
                   //   backgroundColor="rgb(33,100,255)"
                   sx={{ backgroundColor: "rgb(33,129,246)" }}
                   endIcon={<Send />}
-                  
                   onClick={handleSubmit}
                 >
                   Send
