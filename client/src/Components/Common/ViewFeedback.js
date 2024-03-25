@@ -229,7 +229,7 @@ const ViewFeedback = () => {
   const [feedbacks, setFeedbacks] = useState(null);
 
   useEffect(() => {
-    if (user.role === "prof") {
+    if (user.role === "staff") {
       setFeedbacks(profFeedbackData);
     } else if (user.role === "admin") {
       setFeedbacks(adminFeedbackData);
@@ -254,7 +254,7 @@ const ViewFeedback = () => {
       <>
         {/* <Divider /> */}
         <FeedbackItem
-          name={user.role === "prof" ? "" : firstFeedback.name}
+          name={user.role === "staff" ? "" : firstFeedback.name}
           text={firstFeedback.text}
         />
         {currentTypeFeedbacks.map((feedback, index) => {
@@ -262,7 +262,7 @@ const ViewFeedback = () => {
             <>
               <Divider />
               <FeedbackItem
-                name={user.role === "prof" ? "" : firstFeedback.name}
+                name={user.role === "staff" ? "" : firstFeedback.name}
                 text={feedback.text}
               />
             </>

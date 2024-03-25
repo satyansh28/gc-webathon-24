@@ -57,17 +57,17 @@ const Courses = () => {
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_BACKEND+"/api/student/getMyCourses",{
-      credentials:'include',
-    }).then(res=>{
-      if(res.status===200)
-        return res.json()
-      else
-        window.location.href="/"
-    }).then((res)=>{
-      console.log(res.courseList)
-      setCourses(res.courseList)
+    fetch(process.env.REACT_APP_BACKEND + "/api/student/getMyCourses", {
+      credentials: "include",
     })
+      .then((res) => {
+        if (res.status === 200) return res.json();
+        else window.location.href = "/";
+      })
+      .then((res) => {
+        console.log(res.courseList);
+        setCourses(res.courseList);
+      });
     //setCourses(coursesData);
   }, [user]);
 
@@ -138,7 +138,7 @@ const Courses = () => {
                 >
                   Instructors:
                 </Typography>
-                
+
                 <Box direction="column" spacing={1}>
                   {course.courseId.instructor.map((prof, index) => {
                     return (
@@ -153,15 +153,15 @@ const Courses = () => {
                     );
                   })}
                 </Box>
-                
               </Stack>
               <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
-                  className="tauri-regular"
-                >
-                  Attendance: {course.attendedClasses}/{course.courseId.numberOfClasses}
-                </Typography>
+                variant="subtitle1"
+                sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
+                className="tauri-regular"
+              >
+                Attendance: {course.attendedClasses}/
+                {course.courseId.numberOfClasses}
+              </Typography>
               <Button
                 variant="contained"
                 onClick={(event) => {
@@ -176,7 +176,7 @@ const Courses = () => {
         </Grid>
       );
     });
-  } else if (user.role === "prof" || user.role === "admin") {
+  } else if (user.role === "staff" || user.role === "admin") {
     coursesContent = courses.map((course, index) => {
       return (
         <Grid item xs={4} sx={{ height: "100%" }} key={index}>

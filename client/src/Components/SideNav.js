@@ -23,6 +23,7 @@ import {
   Logout,
   PersonAdd,
 } from "@mui/icons-material";
+import { LuBookPlus } from "react-icons/lu";
 import UserContext from "./UserContext";
 
 const Sections = {
@@ -33,25 +34,30 @@ const Sections = {
     { name: "Feedback", link: "/feedback", icon: <Feedback /> },
     { name: "SAC Equipments", link: "/sac", icon: <SportsTennis /> },
   ],
-  prof: [
+  staff: [
     { name: "Courses", link: "/courses/", icon: <AutoStories /> },
     { name: "Feedback", link: "/view-feedback", icon: <Feedback /> },
   ],
   admin: [
     { name: "Courses", link: "/courses/", icon: <AutoStories /> },
     { name: "Feedback", link: "/view-feedback", icon: <Feedback /> },
-    { name: "SignUp", link: "/signup", icon: <PersonAdd /> },
+    { name: "Sign up", link: "/signup", icon: <PersonAdd /> },
+    {
+      name: "Add Course",
+      link: "/add-course",
+      icon: <LuBookPlus fontSize="large" />,
+    },
   ],
 };
 
 const SideNav = () => {
   const [active, setActive] = useState("Courses");
   const { user, updateUser } = useContext(UserContext);
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     // setUser(null);
-    await fetch(process.env.REACT_APP_BACKEND+"/api/auth/logout",{
-      credentials:'include'
-    })
+    await fetch(process.env.REACT_APP_BACKEND + "/api/auth/logout", {
+      credentials: "include",
+    });
 
     updateUser(null);
     //

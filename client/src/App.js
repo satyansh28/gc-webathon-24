@@ -10,10 +10,11 @@ import TakeAttendance from "./Components/Profs/TakeAttendance";
 import Assignments from "./Components/Common/Assignments";
 import AssignmentView from "./Components/Common/AssignmentView";
 import CoursesRegistrationForm from "./Components/Students/CoursesRegistrationForm";
-import SignUp from "./Components/SignUp";
+import SignUp from "./Components/Admin/SignUp";
 import Feedback from "./Components/Students/Feedback";
 import Profile from "./Components/Common/Profile";
 import ViewFeedback from "./Components/Common/ViewFeedback";
+import AddCourse from "./Components/Admin/AddCourse";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -66,6 +67,9 @@ const App = () => {
                 />
                 {user.role === "admin" && (
                   <Route path="/signup" element={<SignUp />} />
+                )}
+                {user.role === "admin" && (
+                  <Route path="/add-course" element={<AddCourse />} />
                 )}
               </Routes>
             </Grid>

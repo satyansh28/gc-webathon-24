@@ -22,7 +22,7 @@ const student_details = {
 };
 const professor_details = {
   email: "spinsetty@iitbbs.ac.in",
-  role: "prof",
+  role: "staff",
 };
 
 const admin_details = {
@@ -35,26 +35,30 @@ const Login = () => {
   const { updateUser } = useContext(UserContext);
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
 
-  const handleLogin = async(e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     // Do api call to fetch user details
-    console.log(process.env.REACT_APP_BACKEND)
-    const response=(await fetch(process.env.REACT_APP_BACKEND+"/api/auth/login",{
-      method:"POST",
-      credentials:"include",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({"email":loginInfo.email,"password":loginInfo.password})
-    }));
-    if(!(response.status===200))
-      alert("Invalid username or password!")
-    else
-    {
-      const data=await response.json()
-      console.log(data)
-      updateUser({role:data.role,email:data.email})
+    console.log(process.env.REACT_APP_BACKEND);
+    const response = await fetch(
+      process.env.REACT_APP_BACKEND + "/api/auth/login",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: loginInfo.email,
+          password: loginInfo.password,
+        }),
+      }
+    );
+    if (!(response.status === 200)) alert("Invalid username or password!");
+    else {
+      const data = await response.json();
+      console.log(data);
+      updateUser({ role: data.role, email: data.email });
     }
     // console.log(student_details);
     // if (loginInfo.email === "shv12@iitbbs.ac.in") {

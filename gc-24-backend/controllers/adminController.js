@@ -31,7 +31,8 @@ exports.getProfessors = async (req, res, next) => {
 };
 exports.getCourses = async (req, res, next) => {
   try {
-    const courseList = await Course.find().populate('instructor','firstName lastName email')
+    const courseList = await Course.find()
+      .populate("instructor", "firstName lastName email")
       .exec();
     res
       .status(200)
@@ -55,14 +56,16 @@ exports.getFeedbacks = async (req, res, next) => {
       .populate({ path: "actorId", model: course })
       .exec();
     const eventList = await feedback.find({ reviewType: "event" }).exec();
-    res.status(200).json({
-        proffesorList,courseList,eventList
-    }).send()
-
-}
-  catch(error)
-  {
-    console.log(error)
-    res.status(400).send()
+    res
+      .status(200)
+      .json({
+        proffesorList,
+        courseList,
+        eventList,
+      })
+      .send();
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
   }
 };
