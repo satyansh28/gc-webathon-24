@@ -138,6 +138,7 @@ const Courses = () => {
                 >
                   Instructors:
                 </Typography>
+                
                 <Box direction="column" spacing={1}>
                   {course.courseId.instructor.map((prof, index) => {
                     return (
@@ -152,7 +153,15 @@ const Courses = () => {
                     );
                   })}
                 </Box>
+                
               </Stack>
+              <Typography
+                  variant="subtitle1"
+                  sx={{ fontWeight: 600, color: "rgb(100,100,100)" }}
+                  className="tauri-regular"
+                >
+                  Attendance: {course.attendedClasses}/{course.courseId.numberOfClasses}
+                </Typography>
               <Button
                 variant="contained"
                 onClick={(event) => {

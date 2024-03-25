@@ -17,7 +17,7 @@ import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAuto
 import { styled } from "@mui/system";
 import { Margin, Send } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
+let text=""
 const blue = {
   100: "#DAECFF",
   200: "#b6daff",
@@ -86,6 +86,7 @@ const bull = (
 );
 
 const SelectOption = (props) => {
+  
   const { selectedOption, displayText, setSelectedOption, options } = props;
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -192,36 +193,75 @@ const Feedback = () => {
 
   useEffect(() => {
     // api call to get courses and professors
-    setProfessors(professorsData);
-    setCourses(coursesData);
-    setIsLoading(false);
+    fetch(process.env.REACT_APP_BACKEND+"/api/student/getFeedbackables",{
+      credentials:'include'
+    })
+    .then(res=>{
+      if(res.status===200)
+        return res.json()
+      else
+        window.location.href="/"
+    }).then(res=>{
+      console.log(res)
+      setProfessors(res.profList|| [])
+      setCourses(res.courseList || [])
+      setIsLoading(false);
+    })
+
   }, []);
   const professorsNames =
     professors === null
       ? []
       : professors.map((professor) => {
-          return professor.name;
+          return professor.firstName+" "+professor.lastName;
         });
   const coursesNames =
     courses === null
       ? []
       : courses.map((course) => {
-          return course.courseName;
+          return course.name;
         });
-
+  const updateText=(e)=>{
+    text=e.target.value
+  }
   const handleSubmit = (event) => {
+    console.log(text)
+    if(text==="")
+      return
+    let type="None"
+    let actorId=null
     if (selectedFeedbackType === "Professor") {
+      type="staff"
+      professors.forEach((professor)=>{
+        if(professor.firstName+" "+professor.lastName===selectedProfessor)
+          actorId=professor._id
+      })
       // api call to the add the feedback in those of the respective professor
     } else if (selectedFeedbackType === "Course") {
+      type="course"
+      courses.forEach((course)=>{
+        if(course.name===selectedCourse)
+          actorId=course._id
+      })
       // api call to the add the feedback in those of the respective professor
     } else if (
       selectedFeedbackType === "Campus Events" ||
       selectedFeedbackType === "Facilities"
     ) {
+      type="event"
       // api call to the add the feedback in those of the respective professor
     }
+    fetch(process.env.REACT_APP_BACKEND+"/api/student/giveFeedback",{
+      method:"POST",
+      credentials:'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({actorId,type,review:text})
+    }).then(res=>navigate("/courses"));
     event.preventDefault();
-    navigate("/courses");
+    //navigate("/courses");
   };
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -281,6 +321,7 @@ const Feedback = () => {
                 aria-label="minimum height"
                 minRows={10}
                 placeholder="Provide feedback here"
+                onChange={updateText}
               />
               <Box className="d-flex flex-column justify-content-end">
                 <Button
@@ -288,6 +329,7 @@ const Feedback = () => {
                   //   backgroundColor="rgb(33,100,255)"
                   sx={{ backgroundColor: "rgb(33,129,246)" }}
                   endIcon={<Send />}
+                  
                   onClick={handleSubmit}
                 >
                   Send

@@ -88,29 +88,69 @@ const CoursesRegistrationForm = () => {
 
   const handleSubmit = (event) => {
     // api call to update the registered courses for the student
-    navigate("/courses");
+    let courseList=[]
+    for(let i=0;i<courses.length;i++)
+    {
+      if(registrationStatus[i])
+        courseList.push(courses[i]._id)
+    }
+    console.log(courseList)
+    fetch(process.env.REACT_APP_BACKEND+"/api/student/applyCourses",{
+      method:"POST",
+      credentials:'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({courseList:courseList})
+    }).then(res=>navigate("/courses"));
+    
     event.preventDefault();
   };
 
+  // {
+  //   courseName: "Operating Systems",
+  //   courseId: "CS3L005",
+  //   elgibleBranches: ["CSE", "ECE", "EE", "MM", "ME", "CE"],
+  //   professors: ["Srinivas Pinisetty"],
+  //   enrolledCount: 120,
+  //   ltp: "0-0-3",
+  //   credits: 2,
+  // }
   useEffect(() => {
+    fetch(process.env.REACT_APP_BACKEND+"/api/student/getAvailableCourses",{
+      credentials:'include'
+    }).then(res=>{
+      if(res.status===200)
+        return res.json()
+      else
+        window.location.href="/"
+    }).then((res)=>{
+      console.log(res.courseList)
+      setCourses(res.courseList)
+      const initialRegistrationStatus = res.courseList.map((course) => {
+        return false;
+      });
+      setRegistrationStatus(initialRegistrationStatus);
+    })
     // api call to get the information of all courses for this student
-    setCourses(coursesData);
-    const initialRegistrationStatus = coursesData.map((course) => {
-      return false;
-    });
-    setRegistrationStatus(initialRegistrationStatus);
-  }, [courses]);
+    // setCourses(coursesData);
+    // const initialRegistrationStatus = coursesData.map((course) => {
+    //   return false;
+    // });
+    // setRegistrationStatus(initialRegistrationStatus);
+  }, []);
   let content = null;
   if (courses === null) {
-    content = <Typography>Failed to fetch available courses.</Typography>;
+    content = <Typography>Loading...</Typography>;
   } else {
     const columnsDetails = [
       { columnName: "Course Name", columnType: "text", align: "left" },
-      { columnName: "Course ID", columnType: "text", align: "center" },
-      {
-        columnName: "L-T-P",
-        align: "center",
-      },
+      // { columnName: "Course ID", columnType: "text", align: "center" },
+      // {
+      //   columnName: "L-T-P",
+      //   align: "center",
+      // },
       {
         columnName: "Credit",
         align: "center",
@@ -120,7 +160,7 @@ const CoursesRegistrationForm = () => {
         align: "center",
       },
       {
-        columnName: "Enrolled Count",
+        columnName: "Max Count",
         align: "center",
       },
       {
@@ -152,19 +192,19 @@ const CoursesRegistrationForm = () => {
                 {courses.map((course, index) => {
                   return (
                     <TableRow>
-                      <TableCell align="left">{course.courseName}</TableCell>
-                      <TableCell align="center">{course.courseId}</TableCell>
-                      <TableCell align="center">{course.ltp}</TableCell>
-                      <TableCell align="center">{course.credits}</TableCell>
+                      <TableCell align="left">{course.name}</TableCell>
+                      {/* <TableCell align="center">{course.courseId}</TableCell>
+                      <TableCell align="center">{course.ltp}</TableCell> */}
+                      <TableCell align="center">{course.credit}</TableCell>
                       <TableCell align="center">
                         <Stack direction="column">
-                          {course.professors.map((prof) => {
-                            return <Typography>{prof}</Typography>;
+                          {course.instructor.map((prof) => {
+                            return <Typography>{prof.firstName+" "+prof.lastName}</Typography>;
                           })}
                         </Stack>
                       </TableCell>
                       <TableCell align="center">
-                        {course.enrolledCount}
+                        {60}
                       </TableCell>
                       <TableCell align="right">
                         <Checkbox

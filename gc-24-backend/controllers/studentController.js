@@ -32,7 +32,7 @@ exports.getAvailableCourses = async (req, res, next) => {
   //await studentCourse.create({studentId:req.user._id,courseId:"65ff0f587701c2c78dc8fd5a"})
   console.log("done");
   try {
-    let courses = await Course.find({ status: "open" }).exec();
+    let courses = await Course.find({ status: "open" }).populate({path:'instructor'}).exec();
     let alreadyApplied = await studentCourse
       .find({ studentId: req.user._id }, "courseId")
       .exec();
@@ -48,7 +48,6 @@ exports.getAvailableCourses = async (req, res, next) => {
     res.status(200).json({
       courseList: courses,
     });
-    res.send();
   } catch (err) {
     console.log(err);
     res.status(400).send();
@@ -57,7 +56,13 @@ exports.getAvailableCourses = async (req, res, next) => {
 
 exports.applyCourses = async (req, res, next) => {
   try {
-    const courseIdList = req.body.courseIdList;
+    if(!req.body.courseList)
+    {
+      res.status(403).send()
+      next()
+    }
+    console.log(req.body.courseList)
+    const courseIdList = req.body.courseList;
     const toAddList = courseIdList.map((courseId) => {
       return {
         courseId: courseId,
@@ -130,7 +135,7 @@ exports.getFeedbackables=async(req,res,next)=>{
     const eventList=[{_id:"65ff0a117701c2c78dc8fd5a",name:"MUN",date:"22/03/2024"},{_id:"65ff05c387701c2c78dc8fd5a",name:"Spring Productions",date:"28/03/2024"}]
     res.status(200).json({
       courseList,eventList,profList
-    }).send()
+    })
   }
   catch(err)
   {
@@ -153,7 +158,7 @@ exports.giveFeedback=async(req,res,next)=>{
 
 exports.getSACEquipment=async(req,res,next)=>{
   try{
-    res.status(200).json({equipmentList:equipments}).send()
+    res.status(200).json({equipmentList:equipments})
   }
   catch(err)
   {
