@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Lottie from "react-lottie";
 import animationData from "../Animations/Animation.json";
 import "../Styles/Login.css";
@@ -72,6 +72,10 @@ const Login = () => {
     console.log(loginInfo);
     navigate("/courses");
   };
+
+  useEffect(() => {
+    // fetch user using cookie
+  }, [])
 
   return (
     <Box

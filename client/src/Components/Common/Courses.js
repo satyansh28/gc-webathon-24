@@ -81,6 +81,18 @@ const Courses = () => {
           console.log(res.courseList);
           setCourses(res.courseList);
         });
+    } else{
+      fetch(process.env.REACT_APP_BACKEND + "/api/academics/courses", {
+        credentials: "include",
+      })
+        .then((res) => {
+          if (res.status === 200) return res.json();
+          else window.location.href = "/";
+        })
+        .then((res) => {
+          console.log(res);
+          setCourses(res);
+        });
     }
     //setCourses(coursesData);
   }, [user]);

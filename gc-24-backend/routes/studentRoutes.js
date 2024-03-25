@@ -5,7 +5,7 @@ const {checkLogin, checkStudent}=require("./../middleware/authMiddleware")
 const router = express.Router();
 
 
-router.put("/edit",checkLogin,checkStudent,studentController.editDetails);
+router.put("/edit",checkLogin,studentController.editDetails);
 router.get("/getAvailableCourses",checkLogin,checkStudent,studentController.getAvailableCourses);
 router.post("/applyCourses",checkLogin,checkStudent,studentController.applyCourses)
 router.get("/getMyCourses",checkLogin,checkStudent,studentController.getMyCourses)

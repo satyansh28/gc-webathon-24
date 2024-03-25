@@ -8,9 +8,18 @@ const StudentCourse = require("../../models/studentCourse");
 exports.getCourses = [
   checkLogin,
   checkStaff,
-  async (_req, res) => {
+  async (req, res) => {
+    let filter = {};
+    if (req.user.role !== "admin") {
+      filter = Object.assign(filter, {
+        instructor: {
+          $elemMatch: { $eq: req.user._id },
+        },
+      });
+    }
+
     try {
-      const courses = await Course.find({}).exec();
+      const courses = await Course.find(filter).exec();
       res.status(200).json(courses);
     } catch (err) {
       console.error("Could not access Courses");
