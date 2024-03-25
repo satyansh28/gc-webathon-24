@@ -96,16 +96,22 @@ exports.getMyCourses=async(req,res,next)=>{
 exports.myAssignments=async(req,res,next)=>{
     
     try{
-        const findFilter={}
-        if(!(req.user.role==="admin" || req.user.role==="staff"))
-          findFilter.studentId=req.user._id
-        if(req.query.assignmentId)
-            findFilter.assignmentId=req.query.assignmentId     
-        let resultList=await studentAssignment.find(findFilter).populate('assignmentId').exec()
-        if(req.query.courseId)
-        {
-          resultList=resultList.filter(res=>res.assignmentId.courseId.toString()===req.query.courseId.toString())
-        }
+        let findFilter={}
+          if(req.query.assignmentId)
+            findFilter._id=req.query.assignmentId   
+          else if(req.query.courseId){
+            findFilter.courseId=req.query.courseId
+          }
+          else{
+            res.status(400).send()
+          }
+            
+          // courseList= await studentCourse.find({studentId:req.user._id}).select("_id").exec()
+  
+        //let resultList=await studentAssignment.find(findFilter).populate('assignmentId').exec()
+        // courseList=courseList.map(course=>{return course._id})
+        let resultList= await assignment.find(findFilter) 
+
         res.status(200).json({
             assignmentList:resultList
         })
